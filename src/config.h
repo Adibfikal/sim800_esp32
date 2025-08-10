@@ -10,7 +10,7 @@
 
 // Serial Configuration
 #define DEBUG_BAUD 115200
-#define SIM800_TIMEOUT 10000  // 10 seconds timeout for commands
+#define SIM800_CMD_TIMEOUT 10000  // 10 seconds timeout for commands
 #define GPS_TIMEOUT 30000     // 30 seconds for GPS fix
 
 // Network Configuration

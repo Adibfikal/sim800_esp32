@@ -49,13 +49,13 @@ private:
   String responseBuffer;
   unsigned long lastCommandTime;
   bool isInitialized;
-  bool isGPRSConnected;
-  bool isGPSEnabled;
+  bool gprsConnected;
+  bool gpsEnabled;
   
   // Private helper methods
   void clearBuffer();
-  String readResponse(unsigned long timeout = SIM800_TIMEOUT);
-  bool waitForResponse(const String& expectedResponse, unsigned long timeout = SIM800_TIMEOUT);
+  String readResponse(unsigned long timeout = SIM800_CMD_TIMEOUT);
+  bool waitForResponse(const String& expectedResponse, unsigned long timeout = SIM800_CMD_TIMEOUT);
   void flushSerial();
   
 public:
@@ -109,10 +109,10 @@ public:
   bool mqttDisconnect();
   
   // Utility functions
-  SIM800Response sendCommand(const String& command, const String& expectedResponse = "OK", 
-                            unsigned long timeout = SIM800_TIMEOUT);
-  SIM800Response sendCommand(const String& command, String& response, 
-                            const String& expectedResponse = "OK", unsigned long timeout = SIM800_TIMEOUT);
+  SIM800Response sendCommand(const String& command, const String& expectedResponse = "OK",
+                            unsigned long timeout = SIM800_CMD_TIMEOUT);
+  SIM800Response sendCommand(const String& command, String& response,
+                            const String& expectedResponse = "OK", unsigned long timeout = SIM800_CMD_TIMEOUT);
   void printDebug(const String& message);
   
   // Status monitoring
