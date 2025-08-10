@@ -5,8 +5,8 @@ SIM800Manager::SIM800Manager() {
   responseBuffer = "";
   lastCommandTime = 0;
   isInitialized = false;
-  isGPRSConnected = false;
-  isGPSEnabled = false;
+  gprsConnected = false;
+  gpsEnabled = false;
 }
 
 SIM800Manager::~SIM800Manager() {
@@ -203,7 +203,7 @@ bool SIM800Manager::connectGPRS() {
   String response;
   if (sendCommand("AT+SAPBR=2,1", response) == SIM800_OK) {
     if (response.indexOf("1,1,") >= 0) {  // Already connected
-      isGPRSConnected = true;
+      gprsConnected = true;
       return true;
     }
   }
@@ -215,7 +215,7 @@ bool SIM800Manager::connectGPRS() {
     // Verify connection
     if (sendCommand("AT+SAPBR=2,1", response) == SIM800_OK) {
       if (response.indexOf("1,1,") >= 0) {
-        isGPRSConnected = true;
+        gprsConnected = true;
         DEBUG_PRINTLN("GPRS connected successfully");
         return true;
       }
@@ -228,14 +228,14 @@ bool SIM800Manager::connectGPRS() {
 
 bool SIM800Manager::disconnectGPRS() {
   if (sendCommand("AT+SAPBR=0,1") == SIM800_OK) {
-    isGPRSConnected = false;
+    gprsConnected = false;
     return true;
   }
   return false;
 }
 
 bool SIM800Manager::isGPRSConnected() {
-  return isGPRSConnected;
+  return gprsConnected;
 }
 
 bool SIM800Manager::getIPAddress(String& ip) {
@@ -271,21 +271,21 @@ bool SIM800Manager::enableGPS() {
     return false;
   }
   
-  isGPSEnabled = true;
+  gpsEnabled = true;
   DEBUG_PRINTLN("GPS enabled successfully");
   return true;
 }
 
 bool SIM800Manager::disableGPS() {
   if (sendCommand("AT+CGPSPWR=0") == SIM800_OK) {
-    isGPSEnabled = false;
+    gpsEnabled = false;
     return true;
   }
   return false;
 }
 
 bool SIM800Manager::isGPSEnabled() {
-  return isGPSEnabled;
+  return gpsEnabled;
 }
 
 bool SIM800Manager::getGPSData(GPSData& gpsData) {
@@ -561,7 +561,7 @@ SIM800Response SIM800Manager::sendCommand(const String& command, String& respons
   #endif
   
   if (response.length() == 0) {
-    return SIM800_TIMEOUT;
+    return SIM800_TIMEOUT_RESP;
   }
   
   if (response.indexOf("ERROR") >= 0) {
@@ -624,8 +624,8 @@ bool SIM800Manager::performDiagnostics() {
 void SIM800Manager::printStatus() {
   DEBUG_PRINTLN("=== SIM800 Status ===");
   DEBUG_PRINTLN("Initialized: " + String(isInitialized ? "Yes" : "No"));
-  DEBUG_PRINTLN("GPRS Connected: " + String(isGPRSConnected ? "Yes" : "No"));
-  DEBUG_PRINTLN("GPS Enabled: " + String(isGPSEnabled ? "Yes" : "No"));
+  DEBUG_PRINTLN("GPRS Connected: " + String(gprsConnected ? "Yes" : "No"));
+  DEBUG_PRINTLN("GPS Enabled: " + String(gpsEnabled ? "Yes" : "No"));
   
   String imei, iccid;
   if (getIMEI(imei)) {

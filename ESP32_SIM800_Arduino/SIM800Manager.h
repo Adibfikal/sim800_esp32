@@ -9,7 +9,7 @@
 enum SIM800Response {
   SIM800_OK = 0,
   SIM800_ERROR = 1,
-  SIM800_TIMEOUT = 2,
+  SIM800_TIMEOUT_RESP = 2,
   SIM800_FAIL = 3,
   SIM800_BUSY = 4
 };
@@ -49,8 +49,8 @@ private:
   String responseBuffer;
   unsigned long lastCommandTime;
   bool isInitialized;
-  bool isGPRSConnected;
-  bool isGPSEnabled;
+  bool gprsConnected;
+  bool gpsEnabled;
   
   // Private helper methods
   void clearBuffer();
