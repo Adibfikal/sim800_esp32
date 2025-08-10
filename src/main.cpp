@@ -19,6 +19,16 @@ struct TestResults {
 
 TestResults testResults;
 
+// Function prototypes
+void runBasicATTests();
+void runSIMCardTest();
+void runNetworkTests();
+void runGPSTests();
+void runGPRSTests();
+void runHTTPTests();
+void runMQTTTests();
+void printTestSummary();
+
 void setup() {
   // Initialize serial for debug output
   Serial.begin(DEBUG_BAUD);
